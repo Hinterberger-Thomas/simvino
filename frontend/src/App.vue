@@ -1,10 +1,20 @@
 <template>
   <div id="nav">
-    <>hello</>
+    <router-view />
   </div>
-  <router-view />
+  
 </template>
 
-<style lang = "scss">
+<script>
 
+export default {
+  name: "App",
+};
+</script>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
+body {
+  font-family: Poppins;
+}
 </style>
