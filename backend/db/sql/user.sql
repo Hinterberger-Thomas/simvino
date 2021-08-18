@@ -1,8 +1,8 @@
-CREATE TABLE IF NOT EXISTS user 
+CREATE TABLE IF NOT EXISTS `user`
 (
- email    varchar(255) NOT NULL AUTO_INCREMENT,
- userID   int NOT NULL ,
- password varchar(255) NOT NULL ,
+ `userID`   int NOT NULL AUTO_INCREMENT,
+ `password` varchar(255) NOT NULL,
+ `email`    varchar(255) NOT NULL UNIQUE,
 
-PRIMARY KEY (email, userID)
+PRIMARY KEY (`userID`)
 );
