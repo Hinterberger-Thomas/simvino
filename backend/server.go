@@ -1,21 +1,38 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
+	"os"
+	"simvino/auth"
+	"simvino/db"
+	"simvino/graph"
+	"simvino/graph/generated"
+
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/go-chi/chi"
 )
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to the HomePage!")
-	fmt.Println("Endpoint Hit: homePage")
-}
-
-func handleRequests() {
-	http.HandleFunc("/", homePage)
-	log.Fatal(http.ListenAndServe(":10000", nil))
-}
+const defaultPort = "8080"
 
 func main() {
-	handleRequests()
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = defaultPort
+	}
+
+	db.InitDB()
+	router := chi.NewRouter()
+
+	router.Use(auth.Middleware())
+
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+
+	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	router.Handle("/query", srv)
+
+	err := http.ListenAndServe(":8080", router)
+	if err != nil {
+		panic(err)
+	}
 }
