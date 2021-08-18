@@ -61,7 +61,7 @@ func GetUserByEmail(email string) (User, error) {
 }
 
 func (user *User) Authenticate() bool {
-	statement, err := db.Db.Prepare("select balanceID from balance WHERE Username = ?")
+	statement, err := db.Db.Prepare("select password from user WHERE email = ?")
 	if err != nil {
 		log.Fatal(err)
 	}
