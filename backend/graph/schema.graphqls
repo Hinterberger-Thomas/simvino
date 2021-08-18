@@ -19,10 +19,6 @@ input NewUser{
   password: String!
 }
 
-input RefreshTokenInput{
-  token: String!
-}
-
 input NewTransaction{
   value: Float!
   currency: String!
@@ -32,9 +28,9 @@ type Mutation {
   updateBalance(input: NewTransaction!): Boolean!
   createUser(input: NewUser!): String!
   login(input: Login!): String!
-  refreshToken(input: RefreshTokenInput!): String!
 } 
 
 type Query {
   getBalance:[Transaction!]!
+  refreshToken: String!
 }
