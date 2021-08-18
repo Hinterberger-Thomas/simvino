@@ -17,10 +17,6 @@ type NewUser struct {
 	Password string `json:"password"`
 }
 
-type RefreshTokenInput struct {
-	Token string `json:"token"`
-}
-
 type Transaction struct {
 	Value    float64 `json:"value"`
 	Currency string  `json:"currency"`
