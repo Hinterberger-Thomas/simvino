@@ -1,10 +1,10 @@
 package balances
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"simvino/db"
+	"simvino/graph/model"
 )
 
 type Balance struct {
@@ -14,7 +14,7 @@ type Balance struct {
 	Value     int    `json:"value"`
 }
 
-func (balance *Balance) InsertBalance() {
+func InsertBalance(balance *Balance) {
 	statement, err := db.Db.Prepare("INSERT INTO balance (userID,currency,value) VALUES(?,?,?)")
 	if err != nil {
 		log.Fatal(err)
@@ -25,21 +25,28 @@ func (balance *Balance) InsertBalance() {
 	}
 }
 
-func GetUserByEmail(userID int) (Balance, error) {
-	statement, err := db.Db.Prepare("select balanceID, currency, value from balance WHERE userID = ?")
+func GetTransactionByUserID(userID int) []*model.Transaction {
+	statement, err := db.Db.Prepare("select currency, value from balance WHERE userID = ?")
 	if err != nil {
 		log.Fatal(err)
 	}
-	row := statement.QueryRow(userID)
+	results, err := statement.Query(userID)
 
-	var balance Balance
-	err = row.Scan(&balance.BalanceID, &balance.Currency, &balance.Value)
 	if err != nil {
-		if err != sql.ErrNoRows {
-			log.Print(err)
-		}
-		return balance, err
+		fmt.Println(err)
 	}
 
-	return balance, nil
+	var transactions []*model.Transaction
+
+	for results.Next() {
+		var tranaciton model.Transaction
+
+		err = results.Scan(&tranaciton.Currency, &tranaciton.Value)
+		if err != nil {
+			panic(err.Error())
+		}
+		transactions = append(transactions, &tranaciton)
+	}
+
+	return transactions
 }
