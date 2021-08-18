@@ -1,29 +1,13 @@
 package db
 
 import (
-	"database/sql"
 	"io/ioutil"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type DB struct {
-	client *sql.DB
-}
-
-func OpenCon() *sql.DB {
-	db, err := sql.Open("mysql", "root:password@tcp(127.0.0.1:3306)/simvino")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-	return db
-
-}
-
-func (db *DB) createUser() {
+func createUser() {
 
 	query, err := ioutil.ReadFile("db/sql/user.sql")
 
@@ -31,10 +15,24 @@ func (db *DB) createUser() {
 		log.Fatal(err)
 	}
 
-	_, err = db.client.Exec(string(query))
+	_, err = Db.Exec(string(query))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func createBalance() {
+
+	query, err := ioutil.ReadFile("db/sql/balance.sql")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	_, err = Db.Exec(string(query))
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
