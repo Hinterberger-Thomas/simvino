@@ -8,14 +8,14 @@ import (
 )
 
 type sessionSecret struct {
-	sessionSecret string `yaml:"session_secret"`
+	sessionSecret string `yaml:"jwt_secret"`
 }
 
 func (c *sessionSecret) Parse(data []byte) error {
 	return yaml.Unmarshal(data, c)
 }
 
-func GetSessionSecret() string {
+func GetSecret() string {
 	data, err := ioutil.ReadFile("config/config.yml")
 	if err != nil {
 		log.Fatal(err)
