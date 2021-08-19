@@ -2,7 +2,6 @@ package users
 
 import (
 	"database/sql"
-	"fmt"
 	"simvino/db"
 
 	"golang.org/x/crypto/bcrypt"
@@ -16,17 +15,19 @@ type User struct {
 	Password string `json:"password"`
 }
 
-func (user *User) InsertUser() {
+func (user *User) InsertUser() error {
 	statement, err := db.Db.Prepare("INSERT INTO user (email,Password) VALUES(?,?)")
-	print(statement)
+
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
 	hashedPassword, _ := HashPassword(user.Password)
 	_, err = statement.Exec(user.Email, hashedPassword)
 	if err != nil {
-		fmt.Println(err)
+		return &DuplicateEmail{}
 	}
+	return err
 }
 
 //HashPassword hashes given password
