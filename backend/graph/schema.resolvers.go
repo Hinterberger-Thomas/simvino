@@ -26,7 +26,11 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	var user users.User
 	user.Email = input.Email
 	user.Password = input.Password
-	user.InsertUser()
+	err := user.InsertUser()
+
+	if err != nil {
+		return "", err
+	}
 
 	token, err := auth.GenerateToken(user.Email)
 	if err != nil {
@@ -57,7 +61,7 @@ func (r *queryResolver) GetBalance(ctx context.Context) ([]*model.Transaction, e
 		return nil, fmt.Errorf("access denied")
 	}
 
-	return balances.GetTransactionByUserID(user.UserID), fmt.Errorf("acces")
+	return balances.GetTransactionByUserID(user.UserID), nil
 }
 
 func (r *queryResolver) RefreshToken(ctx context.Context) (string, error) {
