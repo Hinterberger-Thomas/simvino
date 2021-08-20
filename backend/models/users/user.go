@@ -1,10 +1,12 @@
 package users
 
 import (
+	"crypto/subtle"
 	"database/sql"
+	"fmt"
 	"simvino/db"
 
-	"golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/argon2"
 
 	"log"
 )
@@ -22,7 +24,9 @@ func (user *User) InsertUser() error {
 		return err
 	}
 
-	hashedPassword, _ := HashPassword(user.Password)
+	salt := generatePassword()
+	insertSalt(user.Email, salt)
+	hashedPassword := HashPassword(user.Password, salt)
 	_, err = statement.Exec(user.Email, hashedPassword)
 	if err != nil {
 		return &DuplicateEmail{}
@@ -31,15 +35,15 @@ func (user *User) InsertUser() error {
 }
 
 //HashPassword hashes given password
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
+func HashPassword(password string, salt string) string {
+	hash := argon2.IDKey([]byte(password), []byte(salt), 1, 128*1024, 4, 32)
+	return string(hash)
 }
 
 //CheckPassword hash compares raw password with it's hashed values
-func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
+func CheckPasswordHash(password, hash string, salt string) bool {
+	passwordHashed := argon2.IDKey([]byte(password), []byte(salt), 2, 128*1024, 4, 32)
+	return subtle.ConstantTimeCompare([]byte(passwordHashed), []byte(hash)) == 1
 }
 
 func GetUserByEmail(email string) (User, error) {
@@ -77,6 +81,28 @@ func (user *User) Authenticate() bool {
 			log.Fatal(err)
 		}
 	}
+	salt, err := getSalt(user.Email)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return CheckPasswordHash(user.Password, hashedPassword, salt)
+}
 
-	return CheckPasswordHash(user.Password, hashedPassword)
+func insertSalt(email string, salt string) error {
+	err := db.Client.Set(email, salt, 0).Err()
+	// if there has been an error setting the value
+	// handle the error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func getSalt(email string) (string, error) {
+	val, err := db.Client.Get(email).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return val, nil
 }
