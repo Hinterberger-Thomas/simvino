@@ -1,0 +1,52 @@
+version: '3'
+
+services: 
+  # ui: 
+  #   build: 
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on: 
+  #     - redis
+  #     - mysql
+  #     - graphql_server
+  #   environment:
+  #     graphql_URL: graphql_server:8080
+  #   networks: 
+  #     - backend
+  # graphql_server:
+  #   build: 
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8070:8070"
+  #   restart: unless-stopped
+  #   depends_on: 
+  #     - redis
+  #     - mysql
+  #   environment: 
+  #     REDIS_URL: redis:6379
+  #     MYSQL_URL: mysql:3306
+  #   networks: 
+  #     - backend
+  mysql: 
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: aMVV8WgLHdcv73UwFASbM66Y6LaQ8JFUhFC3xfuSobfZwzkG3EVeh2J2kSkWqPnoMBJM7H3ToAjT7wx42fHKSwrbMD2AaPB78BrXodWmT6yHEg6hNe6wj3PN9w3RarK2
+    ports: 
+        - 3306:3306
+    networks:
+      - backend
+  redis: 
+    image: redis
+    command: sh -c "redis-server --requirepass f9253g52nVr47rKzgyGAiXgX5LwpcFcnwnkccp3t2DCT3b9MSNVnApeBQ2VsdrFbr4786WRpwZ4jXLtsLaqs5a4knnRehDA24WwvLZPGrSNM2oShLz7uGiqok3Ywne7M"
+    ports: 
+      - 6379:6379
+    networks:
+      - backend
+
+networks: 
+  backend:
