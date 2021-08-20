@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
-	"os"
 	"simvino/auth"
+	"simvino/config"
 	"simvino/db"
 	"simvino/graph"
 	"simvino/graph/generated"
@@ -13,15 +13,10 @@ import (
 	"github.com/go-chi/chi"
 )
 
-const defaultPort = "8080"
-
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
-	}
 
-	db.InitDB()
+	config.GetSecret()
+	db.Init()
 	router := chi.NewRouter()
 
 	router.Use(auth.Middleware())
@@ -31,7 +26,7 @@ func main() {
 	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	router.Handle("/query", srv)
 
-	err := http.ListenAndServe(":8080", router)
+	err := http.ListenAndServe(":8070", router)
 	if err != nil {
 		panic(err)
 	}
