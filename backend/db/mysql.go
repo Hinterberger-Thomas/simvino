@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"log"
+	"simvino/config"
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/golang-migrate/migrate/source/file"
@@ -10,9 +11,20 @@ import (
 
 var Db *sql.DB
 
-func InitDB() {
+func initMySQL() {
 	// Use root:dbpass@tcp(172.17.0.2)/hackernews, if you're using Windows.
-	db, err := sql.Open("mysql", "root:password@tcp(127.0.0.1:3306)/simvino")
+	db, err := sql.Open("mysql", "root:"+config.SecretKeys.Mysql_pas+"@tcp(127.0.0.1:3306)/")
+	if err != nil {
+		log.Panic(err)
+	}
+
+	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS simvino CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci; ")
+
+	if err != nil {
+		log.Panic(err)
+	}
+
+	db, err = sql.Open("mysql", "root:"+config.SecretKeys.Mysql_pas+"@tcp(127.0.0.1:3306)/simvino")
 	if err != nil {
 		log.Panic(err)
 	}
