@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"simvino/auth"
+	"simvino/config"
 	"simvino/graph/generated"
 	"simvino/graph/model"
 	"simvino/models/balances"
@@ -25,7 +26,7 @@ func (r *mutationResolver) UpdateBalance(ctx context.Context, input model.NewTra
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (string, error) {
 	var user users.User
 	user.Email = input.Email
-	user.Password = input.Password
+	user.Password = input.Password + config.SecretKeys.PepperPas
 	err := user.InsertUser()
 
 	if err != nil {
@@ -42,7 +43,8 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 func (r *mutationResolver) Login(ctx context.Context, input model.Login) (string, error) {
 	var user users.User
 	user.Email = input.Email
-	user.Password = input.Password
+
+	user.Password = input.Password + config.SecretKeys.PepperPas
 	correct := user.Authenticate()
 	if !correct {
 		// 1
