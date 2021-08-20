@@ -7,22 +7,30 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type sessionSecret struct {
-	sessionSecret string `yaml:"jwt_secret"`
+var SecretKeys Secrets
+
+type Secrets struct {
+	SessionSecret string `yaml:"jwt_secret"`
+	PepperPas     string `yaml:"pepper_pas"`
+	Mysql_pas     string `yaml:"mysql_pas"`
+	Redis_pas     string `yaml:"redis_pas"`
 }
 
-func (c *sessionSecret) Parse(data []byte) error {
+type PepperPas struct {
+}
+
+func (c *Secrets) parse(data []byte) error {
 	return yaml.Unmarshal(data, c)
 }
 
-func GetSecret() string {
+func GetSecret() {
 	data, err := ioutil.ReadFile("config/config.yml")
 	if err != nil {
 		log.Fatal(err)
 	}
-	var config sessionSecret
-	if err := config.Parse(data); err != nil {
+	var config Secrets
+	if err := config.parse(data); err != nil {
 		log.Fatal(err)
 	}
-	return config.sessionSecret
+	SecretKeys = config
 }

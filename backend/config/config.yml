@@ -1,1 +1,4 @@
 jwt_secret: "6VczLB#tbHcTj93a9%y49#ekSccB*sch!W8hFxCkzg^9XG9PWd^bs%TBagCaM88cwVUG55ss696&Uc5K%B*P4buuzYD#grjXyngmzsi^#EN!a!@cfnT3gkDok%att2Wk"
+pepper_pas: "&%6pUm!!Kf7Z3E8ucYSRTA2$QcmmET^k%7VZJGDjfTYn$T#$r5tEXHhPr97!#KnbX*bQT#EhLfhLZ5Kq@zJ^JbbkT&W%QAUa5qyo^ytjzS!@DXAp$z24m&wA4h7w8oeY"
+mysql_pas: aMVV8WgLHdcv73UwFASbM66Y6LaQ8JFUhFC3xfuSobfZwzkG3EVeh2J2kSkWqPnoMBJM7H3ToAjT7wx42fHKSwrbMD2AaPB78BrXodWmT6yHEg6hNe6wj3PN9w3RarK2
+redis_pas: f9253g52nVr47rKzgyGAiXgX5LwpcFcnwnkccp3t2DCT3b9MSNVnApeBQ2VsdrFbr4786WRpwZ4jXLtsLaqs5a4knnRehDA24WwvLZPGrSNM2oShLz7uGiqok3Ywne7M

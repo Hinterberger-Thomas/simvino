@@ -11,7 +11,7 @@ import (
 
 // secret key being used to sign tokens
 var (
-	SecretKey = []byte(config.GetSecret())
+	SecretKey = []byte(config.SecretKeys.SessionSecret)
 )
 
 type defaultClaims struct {
