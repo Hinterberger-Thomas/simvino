@@ -1,0 +1,24 @@
+version: '3.7'
+services:
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis:latest
+    command: --port 6380
+    ports:
+      - "6380:6380"
+    expose:
+      - "6380"
+    restart: always
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: 'postgres:latest'
+
+    ports:
+      - 5432:5432
+
+    environment:
+      POSTGRES_USER: username # The PostgreSQL user (useful to connect to the database)
+      POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
+      POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
