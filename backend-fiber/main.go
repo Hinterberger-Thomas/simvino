@@ -1,47 +1,46 @@
 package main
 
 import (
+	"crypto/tls"
 	"log"
-	"time"
+	"net"
 
-	"github.com/Hinterberger-Thomas/simvino/auth"
+	"github.com/Hinterberger-Thomas/simvino/api"
 	"github.com/Hinterberger-Thomas/simvino/db"
-	"github.com/Hinterberger-Thomas/simvino/model/user"
+	"github.com/Hinterberger-Thomas/simvino/handler"
+	"github.com/Hinterberger-Thomas/simvino/middleware"
+	swagger "github.com/arsmn/fiber-swagger/v2"
+	_ "github.com/arsmn/fiber-swagger/v2/example/docs"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/basicauth"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 func main() {
+
 	app := fiber.New()
-	db.InitRedis()
+	db.InitPostgres()
+	db.InitMongo()
+	go api.GetCoinsValue()
 
-	app.Use(basicauth.New(basicauth.Config{
-		Users: map[string]string{
-			"john":  "doe",
-			"admin": "123456",
-		},
-	}))
-
-	app.Post("/register", func(c *fiber.Ctx) error {
-		payload := struct {
-			Email    string `json:"email"`
-			Password string `json:"password"`
-		}{}
-		maker, err := auth.NewPasetoMaker("asdf")
-		if err != nil {
-			return err
-		}
-		token, err := maker.CreateToken(payload.Email, time.Duration(time.Now().Add(time.Hour*1000).Unix()))
-		if err != nil {
-			return err
-		}
-		user.InsertUserToken(token, payload.Email)
-		return c.SendString("Hello, World!")
+	auth := app.Group("/auth", logger.New(), middleware.Basicauth)
+	userApi := app.Group("/user", logger.New(), middleware.Basicauth, middleware.ValSession)
+	app.Get("/", func(c *fiber.Ctx) error {
+		c.SendStatus(200)
+		return nil
 	})
+	app.Get("/swagger/*", swagger.Handler)
 
-	app.Get("/login", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
+	auth.Get("/login", handler.HandlerLogin)
 
-	log.Fatal(app.Listen(":3000"))
+	auth.Get("/register", handler.HandleRegister)
+
+	userApi.Get("/addCurrency", handler.HandleAddCurrency)
+
+	ln, _ := net.Listen("tcp", "localhost:3000")
+
+	cer, _ := tls.LoadX509KeyPair("./host.cert", "./host.key")
+
+	ln = tls.NewListener(ln, &tls.Config{Certificates: []tls.Certificate{cer}})
+
+	log.Fatal(app.Listener(ln))
 }

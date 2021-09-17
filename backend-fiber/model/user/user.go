@@ -1,17 +1,27 @@
 package user
 
+import "time"
+
 type User struct {
-	UserID string `json:"uuid"`
-	Email  string `json:"email"`
-	Role   string `json:"role"`
+	User_id  uint32
+	Email    string
+	Password string
+	Role     string
 }
 
-type UserTokens struct {
-	Email  string      `json:"email"`
-	Tokens []UserToken `json:"tokens"`
+type BasicUser struct {
+	User_id uint32
+	Role    string
 }
 
-type UserToken struct {
-	Token    string
-	checksum string
+type UserSession struct {
+	Sid     string
+	User_id uint32
+	Role    string
+}
+
+type UserSessionStore struct {
+	User_id uint32    `json:"userid"`
+	Role    string    `json:"role"`
+	Time    time.Time `json:"time"`
 }
