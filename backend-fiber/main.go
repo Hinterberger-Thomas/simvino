@@ -38,7 +38,7 @@ func main() {
 
 	ln, _ := net.Listen("tcp", "localhost:3000")
 
-	cer, _ := tls.LoadX509KeyPair("./host.cert", "./host.key")
+	cer, _ := tls.LoadX509KeyPair("./cert/host.cert", "./cert/host.key")
 
 	ln = tls.NewListener(ln, &tls.Config{Certificates: []tls.Certificate{cer}})
 
