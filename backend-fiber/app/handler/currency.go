@@ -12,7 +12,13 @@ type asset struct {
 	Amount    uint32 `json:"amount"`
 }
 
-var HandleAddCurrency = func(c *fiber.Ctx) error {
+// fsadf ... Gfdasadfsfdas
+// @Summary asdfasfasdfsadf
+// @Description asdfasfdasf
+// @P
+// @Tags tests
+// @Router /user/addCurrency [post]
+func HandleAddCurrency(c *fiber.Ctx) error {
 	user := c.Locals(middleware.UserCtxKey).(user.BasicUser)
 
 	assetParam := asset{}

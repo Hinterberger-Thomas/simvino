@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/lib/pq"
 )
@@ -33,6 +34,6 @@ func InitPostgres() {
 
 func checkError(err error) {
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 }

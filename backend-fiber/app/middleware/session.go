@@ -7,7 +7,7 @@ import (
 
 var (
 	Storage = redis.New(redis.Config{
-		Host:     "127.0.0.1",
+		Host:     "localhost",
 		Port:     6380,
 		Username: "",
 		Password: "",

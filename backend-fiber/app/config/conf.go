@@ -1,6 +1,13 @@
 package config
 
-type Config struct {
+import (
+	"log"
+	"os"
+
+	"gopkg.in/yaml.v2"
+)
+
+type Conf struct {
 	RedisConf struct {
 		Port string `yaml:"port"`
 		Host string `yaml:"host"`
@@ -22,4 +29,21 @@ type Config struct {
 	Password struct {
 		Pepper string `yaml:"pepper"`
 	} `yaml:"password"`
+}
+
+var Configs Conf
+
+func InitConf() {
+	f, err := os.Open("config/config.yaml")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	decoder := yaml.NewDecoder(f)
+	err = decoder.Decode(&Configs)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }

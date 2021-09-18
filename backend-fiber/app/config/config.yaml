@@ -7,8 +7,8 @@ postgres:
   host: localhost
   port: 5432
   user: simvino
-	password: test
-	dbname: simvino
+  password: test
+  dbname: simvino
 
 mongo: 
   host: mongodb://localhost:27017

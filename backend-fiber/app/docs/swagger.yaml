@@ -1,0 +1,79 @@
+basePath: /
+definitions:
+  handler.userPas:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample swagger for Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fiber Example API
+  version: "1.0"
+paths:
+  /auth/addCurrency:
+    get:
+      description: Insert the user with argoin2id in the db. Adds salt and pepper
+        in the process.
+      parameters:
+      - description: Account ID
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handler.userPas'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.userPas'
+      summary: Insert User into the DB
+      tags:
+      - test
+  /user/addCurrency:
+    post:
+      description: asdfasfdasf
+      summary: asdfasfasdfsadf
+      tags:
+      - test
+  /user/person/login:
+    post:
+      description: hello
+      parameters:
+      - description: body参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.userPas'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok" "返回用户信息
+          schema:
+            type: string
+        "400":
+          description: err_code：10002 参数错误； err_code：10003 校验错误
+          schema:
+            type: string
+        "401":
+          description: err_code：10001 登录失败
+          schema:
+            type: string
+        "500":
+          description: err_code：20001 服务错误；err_code：20002 接口错误；err_code：20003 无数据错误；err_code：20004
+            数据库异常；err_code：20005 缓存异常
+          schema:
+            type: string
+      summary: hey
+swagger: "2.0"
