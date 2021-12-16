@@ -1,12 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "build": "cross-env NODE_ENV=production vite build",
-    "dev": "vite --port 3333 --open",
+    "build": "cross-env NODE_ENV=production vite-ssg build",
+    "test:unit": "jest tests/unit",
     "lint": "eslint \"**/*.{vue,ts,js}\"",
-    "test": "cypress open",
+    "dev": "vite --port 3333 --open",
     "preview": "vite preview",
     "preview-https": "serve dist",
+    "test:e2e": "cypress open",
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
@@ -29,12 +30,14 @@
     "@vitejs/plugin-vue": "^2.0.1",
     "@vue/compiler-sfc": "^3.2.26",
     "@vue/server-renderer": "^3.2.26",
+    "@vue/test-utils": "^2.0.0-0",
     "critters": "^0.0.15",
     "cross-env": "^7.0.3",
     "cypress": "^9.1.1",
     "eslint": "^8.4.1",
     "eslint-plugin-cypress": "^2.12.1",
     "https-localhost": "^4.7.0",
+    "jest": "^27.4.5",
     "markdown-it-link-attributes": "^3.0.0",
     "markdown-it-prism": "^2.2.1",
     "pnpm": "^6.24.1",
@@ -50,6 +53,7 @@
     "vite-plugin-vue-layouts": "^0.5.0",
     "vite-plugin-windicss": "^1.5.4",
     "vite-ssg": "^0.17.0",
+    "vue-jest": "^5.0.0-0",
     "vue-tsc": "^0.29.8"
   }
 }
