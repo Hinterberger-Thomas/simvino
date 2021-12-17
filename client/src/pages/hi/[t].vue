@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useUserStore } from '~/stores/user'
 
-const props = defineProps<{ name: string }>()
+const props = defineProps<{ t: string }>()
 const router = useRouter()
 const user = useUserStore()
 const { t } = useI18n()
 
 watchEffect(() => {
-  user.setNewName(props.name)
+  user.setNewName(props.t)
 })
 </script>
 
@@ -17,7 +17,7 @@ watchEffect(() => {
       <carbon-pedestrian class="inline-block" />
     </p>
     <p>
-      {{ t('intro.hi', { name: props.name }) }}
+      {{ t('intro.hi', { name: props.t }) }}
     </p>
 
     <p class="text-sm opacity-50">
