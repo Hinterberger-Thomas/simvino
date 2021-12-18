@@ -6,6 +6,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     CarbonCampsite: typeof import('~icons/carbon/campsite')['default']
     CarbonPedestrian: typeof import('~icons/carbon/pedestrian')['default']
+    CarbonWarning: typeof import('~icons/carbon/warning')['default']
   }
 }
 
